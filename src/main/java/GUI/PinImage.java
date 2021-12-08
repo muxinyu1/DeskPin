@@ -1,5 +1,7 @@
 package GUI;
 
+import javafx.scene.layout.VBox;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;

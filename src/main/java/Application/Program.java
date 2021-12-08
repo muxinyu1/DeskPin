@@ -1,30 +1,30 @@
 package Application;
 
 import GUI.Tray;
-import WIN32.WIN32API;
-import WIN32.Win32Instance;
+import utility.FileCheck;
+import utility.Utility;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Objects;
 
 public class Program {
     static {
+        //预处理：拷贝文件
         try {
-            new Win32Instance.SourceLoad().Source();
-        } catch (URISyntaxException | IOException e) {
+            //JOptionPane.showMessageDialog(null, "pretreatment() is to be executed.");
+            Utility.pretreatment();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public static void main(String[] args) throws IOException {
-        boolean isBlackTheme = Runtime.getRuntime().exec(System.getProperty("java.io.tmpdir") + "Theme.exe")
-                        .getInputStream().read() == 49;
+        //运行前检查是否缺少文件：
+        FileCheck.fileCheck();
+        //运行Theme.exe并截获其输出，确定win10主题：
+        boolean isBlackTheme = isBlackTheme();
         Tray.GUILunch(isBlackTheme);
     }
-    public void print(){
 
-        String path = Objects.requireNonNull(WIN32API.class.getResource("/")).getPath();
-        System.out.println(
-                Objects.requireNonNull(WIN32API.class.getResource("/")).getPath().substring(1) +
-                        "dll/WIN_32");
+    private static boolean isBlackTheme() throws IOException {
+        return Runtime.getRuntime().exec(Utility.getFileInTmpDir("Theme.exe"))
+                .getInputStream().read() == 49;
     }
 }
